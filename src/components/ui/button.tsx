@@ -2,7 +2,7 @@ import { TextClassContext } from '@/components/ui/text'
 import { cn } from '@/lib/utils'
 import { type VariantProps, cva } from 'class-variance-authority'
 import * as React from 'react'
-import { Pressable } from 'react-native'
+import { ActivityIndicator, Pressable, View } from 'react-native'
 
 const buttonVariants = cva(
   'group flex items-center justify-center rounded-md web:ring-offset-background web:transition-colors web:focus-visible:outline-none web:focus-visible:ring-2 web:focus-visible:ring-ring web:focus-visible:ring-offset-2',
@@ -60,12 +60,14 @@ const buttonTextVariants = cva(
 )
 
 type ButtonProps = React.ComponentPropsWithoutRef<typeof Pressable> &
-  VariantProps<typeof buttonVariants>
+  VariantProps<typeof buttonVariants> & {
+    isLoading?: boolean
+  }
 
 const Button = React.forwardRef<
   React.ElementRef<typeof Pressable>,
   ButtonProps
->(({ className, variant, size, ...props }, ref) => {
+>(({ className, variant, size, isLoading, ...props }, ref) => {
   return (
     <TextClassContext.Provider
       value={buttonTextVariants({
@@ -82,7 +84,15 @@ const Button = React.forwardRef<
         ref={ref}
         role="button"
         {...props}
-      />
+      >
+        <View className="flex flex-row gap-2 items-center justify-center">
+          {isLoading ? (
+            <ActivityIndicator size="small" className="text-foreground" />
+          ) : (
+            props.children
+          )}
+        </View>
+      </Pressable>
     </TextClassContext.Provider>
   )
 })
