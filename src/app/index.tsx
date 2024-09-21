@@ -1,116 +1,125 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { Progress } from '@/components/ui/progress'
-import { Text } from '@/components/ui/text'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip'
-import { Info } from '@/lib/icons/Info'
-import * as React from 'react'
-import { useState } from 'react'
-import { View } from 'react-native'
-import Animated, {
-  FadeInUp,
-  FadeOutDown,
-  LayoutAnimationConfig,
-} from 'react-native-reanimated'
+import { Link, useRouter } from 'expo-router'
+import { ActivityIndicator, View } from 'react-native'
 
-const GITHUB_AVATAR_URI =
-  'https://i.pinimg.com/originals/ef/a2/8d/efa28d18a04e7fa40ed49eeb0ab660db.jpg'
+import { Button } from '@/components/ui/button'
+import { Text } from '@/components/ui/text'
+
+import { Activity, MessageSquare, UserRound, UsersRound } from '@/lib/icons'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useEffect, useState } from 'react'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function Screen() {
-  const [progress, setProgress] = useState(78)
+  const [isLoading, setIsLoading] = useState(true)
 
-  function updateProgressValue() {
-    setProgress(Math.floor(Math.random() * 100))
+  const router = useRouter()
+
+  const handleAcceptTerms = async () => {
+    try {
+      await AsyncStorage.setItem('termsAccepted', 'true')
+      router.replace('/home')
+    } catch (error) {
+      console.error('Failed to save terms accepted', error)
+    }
   }
+
+  useEffect(() => {
+    try {
+      const checkTermsAccepted = async () => {
+        const accepted = await AsyncStorage.getItem('termsAccepted')
+
+        if (accepted === 'true') {
+          router.replace('/home')
+        } else {
+          setIsLoading(false)
+        }
+      }
+
+      checkTermsAccepted()
+    } catch (error) {
+      console.error('Failed to check terms accepted', error)
+    }
+  }, [router])
+
   return (
-    <View className="flex-1 justify-center items-center gap-5 p-6 bg-secondary/30">
-      <Card className="w-full max-w-sm p-6 rounded-2xl">
-        <CardHeader className="items-center">
-          <Avatar alt="Rick Sanchez's Avatar" className="w-24 h-24">
-            <AvatarImage source={{ uri: GITHUB_AVATAR_URI }} />
-            <AvatarFallback>
-              <Text>RS</Text>
-            </AvatarFallback>
-          </Avatar>
-          <View className="p-3" />
-          <CardTitle className="pb-2 text-center">Rick Sanchez</CardTitle>
-          <View className="flex-row">
-            <CardDescription className="text-base font-semibold">
-              Scientist
-            </CardDescription>
-            <Tooltip delayDuration={150}>
-              <TooltipTrigger className="px-2 pb-0.5 active:opacity-50">
-                <Info
-                  size={14}
-                  strokeWidth={2.5}
-                  className="w-4 h-4 text-foreground/70"
-                />
-              </TooltipTrigger>
-              <TooltipContent className="py-2 px-4 shadow">
-                <Text className="native:text-lg">Freelance</Text>
-              </TooltipContent>
-            </Tooltip>
-          </View>
-        </CardHeader>
-        <CardContent>
-          <View className="flex-row justify-around gap-3">
-            <View className="items-center">
-              <Text className="text-sm text-muted-foreground">Dimension</Text>
-              <Text className="text-xl font-semibold">C-137</Text>
+    <View className="flex-1 justify-center items-center gap-5 py-10">
+      <SafeAreaView>
+        <View className="mx-auto max-w-sm flex-1 justify-between gap-4">
+          {isLoading ? (
+            <View className="flex-1 items-center justify-center">
+              <ActivityIndicator size="large" className="text-primary" />
             </View>
-            <View className="items-center">
-              <Text className="text-sm text-muted-foreground">Age</Text>
-              <Text className="text-xl font-semibold">70</Text>
-            </View>
-            <View className="items-center">
-              <Text className="text-sm text-muted-foreground">Species</Text>
-              <Text className="text-xl font-semibold">Human</Text>
-            </View>
-          </View>
-        </CardContent>
-        <CardFooter className="flex-col gap-3 pb-0">
-          <View className="flex-row items-center overflow-hidden">
-            <Text className="text-sm text-muted-foreground">Productivity:</Text>
-            <LayoutAnimationConfig skipEntering>
-              <Animated.View
-                key={progress}
-                entering={FadeInUp}
-                exiting={FadeOutDown}
-                className="w-11 items-center"
-              >
-                <Text className="text-sm font-bold text-sky-600">
-                  {progress}%
+          ) : (
+            <>
+              <View className="ios:pt-8 pt-12">
+                <Text className="ios:text-left ios:font-black text-center text-3xl text-foreground font-bold">
+                  Bem-vindo ao
                 </Text>
-              </Animated.View>
-            </LayoutAnimationConfig>
-          </View>
-          <Progress
-            value={progress}
-            className="h-2"
-            indicatorClassName="bg-sky-600"
-          />
-          <View />
-          <Button
-            variant="outline"
-            className="shadow shadow-foreground/5"
-            onPress={updateProgressValue}
-          >
-            <Text>Update</Text>
-          </Button>
-        </CardFooter>
-      </Card>
+                <Text className="ios:text-left ios:font-black text-primary text-2xl text-center font-bold">
+                  CalorieCare
+                </Text>
+              </View>
+              <View className="gap-8">
+                {FEATURES.map(feature => (
+                  <View key={feature.title} className="flex-row gap-4">
+                    <View className="pt-px">{feature.icon}</View>
+                    <View className="flex-1">
+                      <Text className="font-bold text-lg text-foreground">
+                        {feature.title}
+                      </Text>
+                      <Text className="text-muted-foreground">
+                        {feature.description}
+                      </Text>
+                    </View>
+                  </View>
+                ))}
+              </View>
+              <View className="gap-4">
+                <View className="items-center">
+                  <UsersRound className="text-primary" size={24} />
+                  <Text className="pt-1 text-center text-foreground">
+                    Ao continuar, você concorda com nossos{' '}
+                    <Link href="/">
+                      <Text className="text-primary">termos de serviço</Text>
+                    </Link>{' '}
+                    e{' '}
+                    <Link href="/">
+                      <Text className="text-primary">
+                        políticas de privacidade.
+                      </Text>
+                    </Link>
+                  </Text>
+                </View>
+
+                <Button onPress={handleAcceptTerms}>
+                  <Text>Continuar</Text>
+                </Button>
+              </View>
+            </>
+          )}
+        </View>
+      </SafeAreaView>
     </View>
   )
 }
+
+const FEATURES = [
+  {
+    title: 'Personalização completa',
+    description:
+      'Desenvolvemos dietas sob medida, levando em conta suas metas e rotinas.',
+    icon: <UserRound className="text-primary" size={38} />,
+  },
+  {
+    title: 'Tecnologia inteligente',
+    description:
+      'Nossa IA analisa suas necessidades e ajusta o plano para garantir resultados.',
+    icon: <MessageSquare className="text-primary" size={38} />,
+  },
+  {
+    title: 'Saúde em primeiro lugar',
+    description:
+      'Suas preferências alimentares, restrições e objetivos são respeitados.',
+    icon: <Activity className="text-primary" size={38} />,
+  },
+] as const

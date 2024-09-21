@@ -1,6 +1,9 @@
 import '../../global.css'
 
-import { ThemeToggle } from '@/components/ThemeToggle'
+import * as React from 'react'
+import { useEffect, useState } from 'react'
+import { Platform } from 'react-native'
+
 import { setAndroidNavigationBar } from '@/lib/android-navigation-bar'
 import { NAV_THEME } from '@/lib/constants'
 import { useColorScheme } from '@/lib/useColorScheme'
@@ -9,9 +12,6 @@ import { type Theme, ThemeProvider } from '@react-navigation/native'
 import { PortalHost } from '@rn-primitives/portal'
 import { SplashScreen, Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
-import * as React from 'react'
-import { useEffect } from 'react'
-import { Platform } from 'react-native'
 
 const LIGHT_THEME: Theme = {
   dark: false,
@@ -28,26 +28,31 @@ SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
   const { colorScheme, setColorScheme, isDarkColorScheme } = useColorScheme()
-  const [isColorSchemeLoaded, setIsColorSchemeLoaded] = React.useState(false)
+  const [isColorSchemeLoaded, setIsColorSchemeLoaded] = useState(false)
 
   useEffect(() => {
     ;(async () => {
       const theme = await AsyncStorage.getItem('theme')
+
       if (Platform.OS === 'web') {
         document.documentElement.classList.add('bg-background')
       }
+
       if (!theme) {
         AsyncStorage.setItem('theme', colorScheme)
         setIsColorSchemeLoaded(true)
         return
       }
+
       const colorTheme = theme === 'dark' ? 'dark' : 'light'
+
       if (colorTheme !== colorScheme) {
         setColorScheme(colorTheme)
         setAndroidNavigationBar(colorTheme)
         setIsColorSchemeLoaded(true)
         return
       }
+
       setAndroidNavigationBar(colorTheme)
       setIsColorSchemeLoaded(true)
     })().finally(() => {
@@ -66,8 +71,19 @@ export default function RootLayout() {
         <Stack.Screen
           name="index"
           options={{
-            title: 'CalorieCare',
-            headerRight: () => <ThemeToggle />,
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="home"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="nutrition/create-diet"
+          options={{
+            headerShown: false,
           }}
         />
       </Stack>
