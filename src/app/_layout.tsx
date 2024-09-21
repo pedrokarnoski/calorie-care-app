@@ -75,6 +75,12 @@ export default function RootLayout() {
           }}
         />
         <Stack.Screen
+          name="auth/sign-in"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
           name="home"
           options={{
             headerShown: false,
