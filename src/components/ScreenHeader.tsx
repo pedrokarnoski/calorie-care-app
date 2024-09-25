@@ -18,7 +18,10 @@ export function ScreenHeader({ title }: ScreenHeaderProps) {
       <TouchableOpacity onPress={handleBackPress}>
         <ChevronLeft className="text-foreground" size={28} />
       </TouchableOpacity>
-      <Text className="text-foreground font-bold text-xl">{title}</Text>
+      <View className="flex-1 flex-row items-center justify-between">
+        <Text className="text-foreground font-bold text-xl">{title}</Text>
+        <Text className="text-foreground font-medium">Passo 1</Text>
+      </View>
     </View>
   )
 }

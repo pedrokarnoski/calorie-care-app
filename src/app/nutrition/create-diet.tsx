@@ -5,6 +5,8 @@ import { ScreenHeader } from '@/components/ScreenHeader'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Text } from '@/components/ui/text'
+import { useDataStorage } from '@/storage/data'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -22,13 +24,20 @@ export default function CreateDiet() {
   const {
     control,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(nutritionSchema),
   })
 
+  const { setPageOne } = useDataStorage(state => state)
+
   function handleCreate(data: FormData) {
-    console.log(data)
+    setPageOne({
+      name: data.name,
+      weight: data.weight,
+      age: data.age,
+      height: data.height,
+    })
   }
 
   return (
