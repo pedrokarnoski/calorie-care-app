@@ -17,9 +17,11 @@ const buttonVariants = cva(
         ghost:
           'web:hover:bg-accent web:hover:text-accent-foreground active:bg-accent',
         link: 'web:underline-offset-4 web:hover:underline web:focus:underline ',
+        dropdown:
+          'text-left border border-input bg-background web:hover:bg-accent web:hover:text-accent-foreground active:bg-accent',
       },
       size: {
-        default: 'h-10 px-4 py-2 native:h-12 native:px-5 native:py-3',
+        default: 'h-10 px-4 py-2 native:h-12 native:px-2.5 native:py-3',
         sm: 'h-9 rounded-md px-3',
         lg: 'h-11 rounded-md px-8 native:h-14',
         icon: 'h-10 w-10',
@@ -33,7 +35,7 @@ const buttonVariants = cva(
 )
 
 const buttonTextVariants = cva(
-  'web:whitespace-nowrap text-sm native:text-base font-medium text-foreground web:transition-colors',
+  'web:whitespace-nowrap text-base font-medium text-foreground web:transition-colors',
   {
     variants: {
       variant: {
@@ -44,6 +46,7 @@ const buttonTextVariants = cva(
           'text-secondary-foreground group-active:text-secondary-foreground',
         ghost: 'group-active:text-accent-foreground',
         link: 'text-primary group-active:underline',
+        dropdown: 'text-muted-foreground text-2xl text-left flex-1',
       },
       size: {
         default: '',

@@ -1,4 +1,5 @@
-import { ScrollView, View } from 'react-native'
+import { useRef } from 'react'
+import { KeyboardAvoidingView, Platform, ScrollView } from 'react-native'
 
 import { ScreenHeader } from '@/components/ScreenHeader'
 
@@ -8,6 +9,7 @@ import { Text } from '@/components/ui/text'
 import { useDataStorage } from '@/storage/data'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'expo-router'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -21,6 +23,12 @@ const nutritionSchema = z.object({
 type FormData = z.infer<typeof nutritionSchema>
 
 export default function CreateDiet() {
+  const router = useRouter()
+
+  const weightRef = useRef(null)
+  const ageRef = useRef(null)
+  const heightRef = useRef(null)
+
   const {
     control,
     handleSubmit,
@@ -38,11 +46,17 @@ export default function CreateDiet() {
       age: data.age,
       height: data.height,
     })
+
+    router.push('nutrition/second-step')
   }
 
   return (
-    <View className="flex-1">
-      <ScreenHeader title="Dieta" />
+    <KeyboardAvoidingView
+      className="flex-1"
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={80}
+    >
+      <ScreenHeader title="Dieta" subtitle="Passo 1" />
 
       <ScrollView className="p-8">
         <Text className="text-xl font-bold mb-4">Informe seus dados</Text>
@@ -59,6 +73,8 @@ export default function CreateDiet() {
               placeholder="Seu nome completo"
               autoCapitalize="words"
               errorMessage={errors.name?.message}
+              returnKeyType="next"
+              onSubmitEditing={() => weightRef.current?.focus()}
             />
           )}
         />
@@ -74,6 +90,9 @@ export default function CreateDiet() {
               placeholder="Seu peso atual em kg"
               keyboardType="numeric"
               errorMessage={errors.weight?.message}
+              returnKeyType="next"
+              ref={weightRef}
+              onSubmitEditing={() => ageRef.current?.focus()}
             />
           )}
         />
@@ -89,6 +108,8 @@ export default function CreateDiet() {
               placeholder="Sua idade"
               keyboardType="numeric"
               errorMessage={errors.age?.message}
+              ref={ageRef}
+              onSubmitEditing={() => heightRef.current?.focus()}
             />
           )}
         />
@@ -104,14 +125,17 @@ export default function CreateDiet() {
               placeholder="Sua altura em cm"
               keyboardType="numeric"
               errorMessage={errors.height?.message}
+              returnKeyType="done"
+              ref={heightRef}
+              onSubmitEditing={handleSubmit(handleCreate)}
             />
           )}
         />
 
-        <Button className="mt-4" onPress={handleSubmit(handleCreate)}>
+        <Button className="mt-4 mb-20" onPress={handleSubmit(handleCreate)}>
           <Text>Avançar</Text>
         </Button>
       </ScrollView>
-    </View>
+    </KeyboardAvoidingView>
   )
 }

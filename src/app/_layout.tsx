@@ -67,31 +67,13 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
       <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
-      <Stack>
-        <Stack.Screen
-          name="index"
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="auth/sign-in"
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="home"
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="nutrition/create-diet"
-          options={{
-            headerShown: false,
-          }}
-        />
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="index" />
+        <Stack.Screen name="auth/sign-in" />
+        <Stack.Screen name="home" />
+        <Stack.Screen name="nutrition/create-diet" />
+        <Stack.Screen name="nutrition/second-step" />
+        <Stack.Screen name="nutrition/resume" />
       </Stack>
       <PortalHost />
     </ThemeProvider>
