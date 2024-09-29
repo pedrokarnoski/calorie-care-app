@@ -68,9 +68,9 @@ export default function SecondStep() {
   ]
 
   const objectiveOptions = [
-    { label: 'Emagrecer', value: 'emagrecer' },
+    { label: 'Emagrecer', value: 'Emagrecer' },
     { label: 'Hipertrofia', value: 'Hipertrofia' },
-    { label: 'Hipertrofia + Definição', value: 'Hipertrofia e Definição' },
+    { label: 'Hipertrofia e definição', value: 'Hipertrofia e definição' },
     { label: 'Definição', value: 'Definição' },
   ]
 

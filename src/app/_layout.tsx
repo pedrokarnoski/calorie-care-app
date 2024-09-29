@@ -13,6 +13,9 @@ import { PortalHost } from '@rn-primitives/portal'
 import { SplashScreen, Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 
+import { queryClient } from '@/lib/react-query'
+import { QueryClientProvider } from '@tanstack/react-query'
+
 const LIGHT_THEME: Theme = {
   dark: false,
   colors: NAV_THEME.light,
@@ -67,14 +70,16 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
       <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="index" />
-        <Stack.Screen name="auth/sign-in" />
-        <Stack.Screen name="home" />
-        <Stack.Screen name="nutrition/create-diet" />
-        <Stack.Screen name="nutrition/second-step" />
-        <Stack.Screen name="nutrition/resume" />
-      </Stack>
+      <QueryClientProvider client={queryClient}>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="index" />
+          <Stack.Screen name="auth/sign-in" />
+          <Stack.Screen name="home" />
+          <Stack.Screen name="nutrition/create-diet" />
+          <Stack.Screen name="nutrition/second-step" />
+          <Stack.Screen name="nutrition/resume" />
+        </Stack>
+      </QueryClientProvider>
       <PortalHost />
     </ThemeProvider>
   )
