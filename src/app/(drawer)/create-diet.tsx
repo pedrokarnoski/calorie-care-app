@@ -47,7 +47,7 @@ export default function CreateDiet() {
       height: data.height,
     })
 
-    router.push('nutrition/second-step')
+    router.push('/second-step')
   }
 
   return (

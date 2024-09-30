@@ -2,7 +2,7 @@ import { View } from 'react-native'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Text } from '@/components/ui/text'
-import { ThemeToggle } from './ThemeToggle'
+import { DrawerToggleButton } from '@react-navigation/drawer'
 
 const GITHUB_AVATAR_URI = 'https://github.com/pedrokarnoski.png'
 
@@ -20,7 +20,9 @@ export function HeaderHome() {
         <Text className="text-foreground font-medium">Pedro</Text>
       </View>
 
-      <ThemeToggle />
+      {/* <ThemeToggle /> */}
+
+      <DrawerToggleButton />
     </View>
   )
 }

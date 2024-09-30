@@ -199,7 +199,7 @@ export default function Resume() {
 
               <Button
                 variant="secondary"
-                onPress={() => router.replace('/nutrition/create-diet')}
+                onPress={() => router.replace('/create-diet')}
               >
                 <Text>Gerar nova dieta</Text>
               </Button>

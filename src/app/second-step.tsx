@@ -83,7 +83,7 @@ export default function SecondStep() {
       level: data.level,
     })
 
-    router.push('nutrition/resume')
+    router.push('/resume')
   }
 
   return (

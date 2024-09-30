@@ -1,18 +1,17 @@
 import { Text } from '@/components/ui/text'
-import { Link, Stack } from 'expo-router'
+import { Link } from 'expo-router'
 import { View } from 'react-native'
 
 export default function NotFoundScreen() {
   return (
-    <>
-      <Stack.Screen options={{ title: 'Oops!' }} />
-      <View>
-        <Text>This screen doesn't exist.</Text>
-
-        <Link href="/">
-          <Text>Go to home screen!</Text>
+    <View className="flex-1 justify-center items-center gap-5 py-10">
+      <Text className="text-4xl font-bold text-center">404</Text>
+      <Text className="text-lg text-center">
+        Página não encontrada.{' '}
+        <Link href="/" className="text-primary">
+          Voltar para a página inicial
         </Link>
-      </View>
-    </>
+      </Text>
+    </View>
   )
 }
