@@ -14,7 +14,7 @@ import { Link } from 'expo-router'
 export default function Home() {
   return (
     <DrawerSceneWrapper>
-      <View className="flex-1">
+      <View className="flex-1 bg-background">
         <HeaderHome />
 
         <View className="p-8 gap-4">
