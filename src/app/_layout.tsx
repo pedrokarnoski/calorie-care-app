@@ -2,7 +2,7 @@ import '../../global.css'
 
 import * as React from 'react'
 import { useEffect, useState } from 'react'
-import { Platform } from 'react-native'
+import { ActivityIndicator, Platform, View } from 'react-native'
 
 import { setAndroidNavigationBar } from '@/lib/android-navigation-bar'
 import { NAV_THEME } from '@/lib/constants'
@@ -10,10 +10,13 @@ import { useColorScheme } from '@/lib/useColorScheme'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { type Theme, ThemeProvider } from '@react-navigation/native'
 import { PortalHost } from '@rn-primitives/portal'
-import { Slot, SplashScreen } from 'expo-router'
+import { Slot, SplashScreen, router } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 
+import { env } from '@/env'
 import { queryClient } from '@/lib/react-query'
+import { tokenCache } from '@/storage/tokenCache'
+import { ClerkLoaded, ClerkProvider, useAuth } from '@clerk/clerk-expo'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
@@ -33,6 +36,30 @@ SplashScreen.preventAutoHideAsync()
 export default function RootLayout() {
   const { colorScheme, setColorScheme, isDarkColorScheme } = useColorScheme()
   const [isColorSchemeLoaded, setIsColorSchemeLoaded] = useState(false)
+
+  const publishableKey = env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY
+
+  function InitialLayout() {
+    const { isSignedIn, isLoaded } = useAuth()
+
+    useEffect(() => {
+      if (!isLoaded) return
+
+      if (!isSignedIn) {
+        router.replace('/(auth)')
+      } else {
+        router.replace('/(drawer)/home')
+      }
+    }, [isSignedIn, isLoaded])
+
+    return isLoaded ? (
+      <Slot />
+    ) : (
+      <View className="flex-1 items-center justify-center">
+        <ActivityIndicator size="large" className="text-primary" />
+      </View>
+    )
+  }
 
   useEffect(() => {
     ;(async () => {
@@ -72,17 +99,13 @@ export default function RootLayout() {
     <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
       <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
       <QueryClientProvider client={queryClient}>
-        <GestureHandlerRootView className="flex-1">
-          {/* <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="index" />
-          <Stack.Screen name="auth/sign-in" />
-          <Stack.Screen name="root/home" />
-          <Stack.Screen name="root/create-diet" />
-          <Stack.Screen name="root/second-step" />
-          <Stack.Screen name="root/resume" />
-        </Stack> */}
-          <Slot />
-        </GestureHandlerRootView>
+        <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
+          <ClerkLoaded>
+            <GestureHandlerRootView className="flex-1">
+              <InitialLayout />
+            </GestureHandlerRootView>
+          </ClerkLoaded>
+        </ClerkProvider>
       </QueryClientProvider>
       <PortalHost />
     </ThemeProvider>

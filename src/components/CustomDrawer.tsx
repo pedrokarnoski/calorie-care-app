@@ -2,6 +2,7 @@ import { ThemeToggle } from '@/components/ThemeToggle'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Text } from '@/components/ui/text'
 import { LogOut } from '@/lib/icons'
+import { useAuth, useUser } from '@clerk/clerk-expo'
 import {
   type DrawerContentComponentProps,
   DrawerContentScrollView,
@@ -14,20 +15,32 @@ const GITHUB_AVATAR_URI = 'https://github.com/pedrokarnoski.png'
 const version = expo.version
 
 export function CustomDrawer(drawerProps: DrawerContentComponentProps) {
+  const { signOut } = useAuth()
+  const { user } = useUser()
+
+  const firstLetter = user?.firstName
+    ? user.firstName.charAt(0).toUpperCase()
+    : ''
+
   return (
     <View className="flex-1">
       <DrawerContentScrollView className="bg-card" {...drawerProps}>
         <View className="flex-row gap-4 p-4 py-10 items-center">
-          <Avatar alt="Avatar">
-            <AvatarImage source={{ uri: GITHUB_AVATAR_URI }} />
-            <AvatarFallback>
-              <Text>PK</Text>
-            </AvatarFallback>
-          </Avatar>
+          {user?.hasImage ? (
+            <Avatar alt="Avatar">
+              <AvatarImage source={{ uri: user?.imageUrl }} />
+            </Avatar>
+          ) : (
+            <Avatar alt="Avatar">
+              <AvatarFallback>
+                <Text>{firstLetter}</Text>
+              </AvatarFallback>
+            </Avatar>
+          )}
 
           <View>
-            <Text className="font-semibold">Pedro</Text>
-            <Text className="text-xs">@pedrokarnoski</Text>
+            <Text className="font-semibold">{user?.firstName}</Text>
+            {user?.username && <Text className="text-xs">{user.username}</Text>}
           </View>
         </View>
 
@@ -39,7 +52,7 @@ export function CustomDrawer(drawerProps: DrawerContentComponentProps) {
           <ThemeToggle />
         </View>
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => signOut()}>
           <View className="flex-row gap-4 items-center">
             <LogOut className="text-foreground" size={24} />
 

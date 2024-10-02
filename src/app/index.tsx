@@ -17,8 +17,7 @@ export default function Screen() {
   const handleAcceptTerms = async () => {
     try {
       await AsyncStorage.setItem('termsAccepted', 'true')
-      // router.replace('/auth/sign-in')
-      router.replace('/(drawer)/home')
+      router.replace('/(auth)')
     } catch (error) {
       console.error('Failed to save terms accepted', error)
     }
@@ -30,8 +29,7 @@ export default function Screen() {
         const accepted = await AsyncStorage.getItem('termsAccepted')
 
         if (accepted === 'true') {
-          // router.replace('/auth/sign-in')
-          router.replace('/(drawer)/home')
+          router.replace('/(auth)')
         } else {
           setIsLoading(false)
         }
