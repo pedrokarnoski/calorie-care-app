@@ -47,18 +47,14 @@ export default function DrawerLayout() {
         name="home"
         options={{
           drawerLabel: 'Início',
-          drawerIcon: () => (
-            <House className="text-muted-foreground" size={24} />
-          ),
+          drawerIcon: () => <House className="text-foreground" size={24} />,
         }}
       />
       <Drawer.Screen
         name="create-diet"
         options={{
           drawerLabel: 'Criar dieta',
-          drawerIcon: () => (
-            <Salad className="text-muted-foreground" size={24} />
-          ),
+          drawerIcon: () => <Salad className="text-foreground" size={24} />,
         }}
       />
     </Drawer>

@@ -1,4 +1,4 @@
-import { useDrawerProgress } from '@react-navigation/drawer'
+import { useDrawerProgress, useDrawerStatus } from '@react-navigation/drawer'
 import type { ReactNode } from 'react'
 import Animated, {
   Extrapolation,
@@ -8,6 +8,7 @@ import Animated, {
 
 export function DrawerSceneWrapper({ children }: { children: ReactNode }) {
   const progress = useDrawerProgress()
+  const status = useDrawerStatus()
 
   const animatedStyled = useAnimatedStyle(() => ({
     transform: [
@@ -31,7 +32,7 @@ export function DrawerSceneWrapper({ children }: { children: ReactNode }) {
         rotateY: `${interpolate(progress.value, [0, 1], [0, -25], Extrapolation.CLAMP)}deg`,
       },
     ],
-    borderRadius: 18,
+    borderRadius: status === 'open' ? 18 : 0,
     overflow: 'hidden',
   }))
 
