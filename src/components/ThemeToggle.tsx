@@ -1,14 +1,14 @@
+import { Text } from '@/components/ui/text'
 import { setAndroidNavigationBar } from '@/lib/android-navigation-bar'
 import { MoonStar, Sun } from '@/lib/icons'
 import { useColorScheme } from '@/lib/useColorScheme'
-import { cn } from '@/lib/utils'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { Pressable, View } from 'react-native'
+import { TouchableOpacity, View } from 'react-native'
 
 export function ThemeToggle() {
   const { isDarkColorScheme, setColorScheme } = useColorScheme()
   return (
-    <Pressable
+    <TouchableOpacity
       onPress={() => {
         const newTheme = isDarkColorScheme ? 'light' : 'dark'
         setColorScheme(newTheme)
@@ -17,20 +17,19 @@ export function ThemeToggle() {
       }}
       className="web:ring-offset-background web:transition-colors web:focus-visible:outline-none web:focus-visible:ring-2 web:focus-visible:ring-ring web:focus-visible:ring-offset-2"
     >
-      {({ pressed }) => (
-        <View
-          className={cn(
-            'aspect-square pt-0.5 justify-center items-start web:px-5',
-            pressed && 'opacity-70'
-          )}
-        >
-          {isDarkColorScheme ? (
-            <MoonStar className="text-foreground" size={23} />
-          ) : (
+      <View>
+        {isDarkColorScheme ? (
+          <View className="flex-row gap-4 items-center">
+            <MoonStar className="text-foreground" size={24} />
+            <Text className="font-medium">Escuro</Text>
+          </View>
+        ) : (
+          <View className="flex-row gap-4 items-center">
             <Sun className="text-foreground" size={24} />
-          )}
-        </View>
-      )}
-    </Pressable>
+            <Text className="font-medium">Claro</Text>
+          </View>
+        )}
+      </View>
+    </TouchableOpacity>
   )
 }

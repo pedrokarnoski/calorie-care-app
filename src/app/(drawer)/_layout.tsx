@@ -23,8 +23,8 @@ export default function DrawerLayout() {
           ? NAV_THEME.dark.foreground
           : NAV_THEME.light.foreground,
         drawerInactiveTintColor: isDarkColorScheme
-          ? NAV_THEME.dark.foreground
-          : NAV_THEME.light.foreground,
+          ? NAV_THEME.dark['muted-foreground']
+          : NAV_THEME.light['muted-foreground'],
         overlayColor: 'transparent',
         drawerStyle: {
           backgroundColor: isDarkColorScheme
@@ -47,14 +47,24 @@ export default function DrawerLayout() {
         name="home"
         options={{
           drawerLabel: 'Início',
-          drawerIcon: () => <House className="text-foreground" size={24} />,
+          drawerIcon: ({ focused }) => (
+            <House
+              className={focused ? 'text-foreground' : 'text-muted-foreground'}
+              size={24}
+            />
+          ),
         }}
       />
       <Drawer.Screen
         name="create-diet"
         options={{
           drawerLabel: 'Criar dieta',
-          drawerIcon: () => <Salad className="text-foreground" size={24} />,
+          drawerIcon: ({ focused }) => (
+            <Salad
+              className={focused ? 'text-foreground' : 'text-muted-foreground'}
+              size={24}
+            />
+          ),
         }}
       />
     </Drawer>
