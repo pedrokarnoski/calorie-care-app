@@ -11,7 +11,6 @@ import {
 import { TouchableOpacity, View } from 'react-native'
 import { expo } from '../../app.json'
 
-const GITHUB_AVATAR_URI = 'https://github.com/pedrokarnoski.png'
 const version = expo.version
 
 export function CustomDrawer(drawerProps: DrawerContentComponentProps) {

@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { ImageBackground, View } from 'react-native'
+import { ActivityIndicator, View } from 'react-native'
 
 import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
 import { Text } from '@/components/ui/text'
 
-import { GoogleIcon, Salad } from '@/lib/icons'
+import { AppleIcon, FacebookIcon, GoogleIcon, Salad } from '@/lib/icons'
 
 import { useOAuth } from '@clerk/clerk-expo'
 import * as Linking from 'expo-linking'
@@ -20,24 +19,63 @@ export default function SignIn() {
     strategy: 'oauth_google',
   })
 
+  const facebookOAuth = useOAuth({
+    strategy: 'oauth_facebook',
+  })
+
+  const appleOAuth = useOAuth({
+    strategy: 'oauth_apple',
+  })
+
   async function onGoogleSignIn() {
+    await handleOAuthSignIn(googleOAuth, 'Google')
+  }
+
+  async function onFacebookSignIn() {
+    await handleOAuthSignIn(facebookOAuth, 'Facebook')
+  }
+
+  async function onAppleSignIn() {
+    await handleOAuthSignIn(appleOAuth, 'Apple')
+  }
+
+  interface OAuthProvider {
+    startOAuthFlow: (options: {
+      redirectUrl: string
+    }) => Promise<OAuthFlowResult>
+  }
+
+  interface OAuthFlowResult {
+    authSessionResult?: { type: string }
+    setActive?: (options: { session: string }) => Promise<void>
+    createdSessionId?: string
+  }
+
+  async function handleOAuthSignIn(
+    oAuthProvider: OAuthProvider,
+    providerName: string
+  ): Promise<void> {
     try {
       setIsLoading(true)
 
       const redirectUrl = Linking.createURL('/(drawer)/home')
 
-      const oAuthFlow = await googleOAuth.startOAuthFlow({ redirectUrl })
+      const oAuthFlow = await oAuthProvider.startOAuthFlow({ redirectUrl })
 
       if (oAuthFlow.authSessionResult?.type === 'success') {
         if (oAuthFlow.setActive) {
-          await oAuthFlow.setActive({ session: oAuthFlow.createdSessionId })
-        } else {
-          setIsLoading(false)
+          if (oAuthFlow.createdSessionId) {
+            await oAuthFlow.setActive({ session: oAuthFlow.createdSessionId })
+          } else {
+            throw new Error('Session ID is undefined')
+          }
         }
+      } else {
+        setIsLoading(false)
       }
     } catch (error) {
       setIsLoading(false)
-      console.error('Failed to sign in with Google', error)
+      console.error(`Failed to sign in with ${providerName}`, error)
     }
   }
 
@@ -49,44 +87,54 @@ export default function SignIn() {
     }
   }, [])
 
+  if (isLoading) {
+    return (
+      <View className="flex-1 items-center justify-center">
+        <ActivityIndicator size="large" className="text-primary" />
+      </View>
+    )
+  }
+
   return (
-    <View className="flex-1 bg-background">
-      <ImageBackground
-        className="flex-1 justify-center"
-        source={require('@/assets/background.png')}
-      >
-        <View className="flex-1 items-center justify-center gap-4 px-8">
-          <View className="flex items-center gap-2 mb-16">
-            <Salad className="text-primary" size={64} />
-            <Text className="text-foreground">
-              Calorie<Text className="text-foreground font-bold">Care</Text>
-            </Text>
-          </View>
+    <View className="flex-1 items-center justify-center gap-4 px-8 bg-background">
+      <View className="flex items-center gap-2 mb-16">
+        <Salad className="text-primary" size={48} />
+        <Text className="text-foreground font-semibold">CalorieCare</Text>
+        <Text className="text-foreground text-sm">Bem-vindo de volta!</Text>
+      </View>
 
-          <Text className="font-semibold text-foreground text-xl">
-            Acesse sua conta
-          </Text>
+      <Text className="font-semibold text-foreground text-xl">
+        Acesse sua conta
+      </Text>
 
-          <View className="w-full">
-            <View className="flex-1 gap-4 mt-6">
-              <Separator />
+      <View className="flex-row justify-between gap-4 mt-4 w-full">
+        <Button
+          size="lg"
+          variant="outline"
+          onPress={onGoogleSignIn}
+          className="flex-1"
+        >
+          <GoogleIcon className="text-foreground" size={22} />
+        </Button>
 
-              <Button
-                isLoading={isLoading}
-                variant="ghost"
-                onPress={onGoogleSignIn}
-              >
-                <GoogleIcon className="text-foreground" size={18} />
-                <Text>Entrar com o Google</Text>
-              </Button>
+        <Button
+          size="lg"
+          variant="outline"
+          onPress={onFacebookSignIn}
+          className="flex-1"
+        >
+          <FacebookIcon className="text-foreground" size={22} />
+        </Button>
 
-              <View className="mt-8 items-center justify-center">
-                <Text className="text-foreground">Ainda não tem acesso?</Text>
-              </View>
-            </View>
-          </View>
-        </View>
-      </ImageBackground>
+        <Button
+          size="lg"
+          variant="outline"
+          onPress={onAppleSignIn}
+          className="flex-1"
+        >
+          <AppleIcon className="text-foreground" size={22} />
+        </Button>
+      </View>
     </View>
   )
 }
