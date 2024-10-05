@@ -46,7 +46,7 @@ export default function RootLayout() {
       if (!isLoaded) return
 
       if (!isSignedIn) {
-        router.replace('/(auth)')
+        router.replace('/')
       } else {
         router.replace('/(drawer)/home')
       }
@@ -55,7 +55,7 @@ export default function RootLayout() {
     return isLoaded ? (
       <Slot />
     ) : (
-      <View className="flex-1 items-center justify-center">
+      <View className="flex-1 items-center justify-center bg-background">
         <ActivityIndicator size="large" className="text-primary" />
       </View>
     )

@@ -41,62 +41,62 @@ export default function Screen() {
     }
   }, [router])
 
+  if (isLoading) {
+    return (
+      <View className="flex-1 items-center justify-center bg-background">
+        <ActivityIndicator size="large" className="text-primary" />
+      </View>
+    )
+  }
+
   return (
-    <View className="flex-1 justify-center items-center gap-5 py-10">
+    <View className="flex-1 justify-center items-center gap-5 py-10 bg-background">
       <SafeAreaView>
         <View className="mx-auto max-w-sm flex-1 justify-between gap-4">
-          {isLoading ? (
-            <View className="flex-1 items-center justify-center">
-              <ActivityIndicator size="large" className="text-primary" />
-            </View>
-          ) : (
-            <>
-              <View className="ios:pt-8 pt-12">
-                <Text className="ios:text-left ios:font-black text-center text-3xl text-foreground font-bold">
-                  Bem-vindo ao
-                </Text>
-                <Text className="ios:text-left ios:font-black text-primary text-2xl text-center font-bold">
-                  CalorieCare
-                </Text>
-              </View>
-              <View className="gap-8">
-                {FEATURES.map(feature => (
-                  <View key={feature.title} className="flex-row gap-4">
-                    <View className="pt-px">{feature.icon}</View>
-                    <View className="flex-1">
-                      <Text className="font-bold text-lg text-foreground">
-                        {feature.title}
-                      </Text>
-                      <Text className="text-muted-foreground">
-                        {feature.description}
-                      </Text>
-                    </View>
-                  </View>
-                ))}
-              </View>
-              <View className="gap-4">
-                <View className="items-center">
-                  <UsersRound className="text-primary" size={24} />
-                  <Text className="pt-1 text-center text-foreground">
-                    Ao continuar, você concorda com nossos{' '}
-                    <Link href="/">
-                      <Text className="text-primary">termos de serviço</Text>
-                    </Link>{' '}
-                    e{' '}
-                    <Link href="/">
-                      <Text className="text-primary">
-                        políticas de privacidade.
-                      </Text>
-                    </Link>
+          <View className="ios:pt-8 pt-12">
+            <Text className="ios:text-left ios:font-black text-center text-3xl text-foreground font-bold">
+              Bem-vindo ao
+            </Text>
+            <Text className="ios:text-left ios:font-black text-primary text-2xl text-center font-bold">
+              CalorieCare
+            </Text>
+          </View>
+          <View className="gap-8">
+            {FEATURES.map(feature => (
+              <View key={feature.title} className="flex-row gap-4">
+                <View className="pt-px">{feature.icon}</View>
+                <View className="flex-1">
+                  <Text className="font-bold text-lg text-foreground">
+                    {feature.title}
+                  </Text>
+                  <Text className="text-muted-foreground">
+                    {feature.description}
                   </Text>
                 </View>
-
-                <Button onPress={handleAcceptTerms}>
-                  <Text>Continuar</Text>
-                </Button>
               </View>
-            </>
-          )}
+            ))}
+          </View>
+          <View className="gap-4">
+            <View className="items-center">
+              <UsersRound className="text-primary" size={24} />
+              <Text className="pt-1 text-center text-foreground">
+                Ao continuar, você concorda com nossos{' '}
+                <Link href="/">
+                  <Text className="text-primary">termos de serviço</Text>
+                </Link>{' '}
+                e{' '}
+                <Link href="/">
+                  <Text className="text-primary">
+                    políticas de privacidade.
+                  </Text>
+                </Link>
+              </Text>
+            </View>
+
+            <Button onPress={handleAcceptTerms}>
+              <Text>Continuar</Text>
+            </Button>
+          </View>
         </View>
       </SafeAreaView>
     </View>

@@ -1,6 +1,12 @@
-import { ActivityIndicator, ScrollView, Share, View } from 'react-native'
+import {
+  ActivityIndicator,
+  ScrollView,
+  Share,
+  TouchableOpacity,
+  View,
+} from 'react-native'
 
-import { ResumeHeader } from '@/components/ResumeHeader'
+import { Header } from '@/components/Header'
 import { Text } from '@/components/ui/text'
 
 import { createNutrition } from '@/api/create-nutrition'
@@ -157,7 +163,14 @@ export default function Resume() {
 
   return (
     <View className="flex-1">
-      <ResumeHeader title="Dieta" onShare={handleShare} />
+      <Header
+        title="Dieta"
+        action={
+          <TouchableOpacity onPress={handleShare}>
+            <Text className="text-foreground font-medium">Compartilhar</Text>
+          </TouchableOpacity>
+        }
+      />
 
       <ScrollView className="p-8">
         <Text className="text-xl font-bold mb-4">Recomendação de dieta</Text>

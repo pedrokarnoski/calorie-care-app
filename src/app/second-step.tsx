@@ -1,4 +1,4 @@
-import { ScreenHeader } from '@/components/ScreenHeader'
+import { Header } from '@/components/Header'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -88,7 +88,10 @@ export default function SecondStep() {
 
   return (
     <View className="flex-1">
-      <ScreenHeader title="Dieta" subtitle="Passo 2" />
+      <Header
+        title="Dieta"
+        action={<Text className="text-foreground font-medium">Passo 2</Text>}
+      />
 
       <ScrollView className="p-8">
         <Text className="text-xl font-bold mb-4">Informe seus dados</Text>

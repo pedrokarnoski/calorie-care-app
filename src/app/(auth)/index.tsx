@@ -89,7 +89,7 @@ export default function SignIn() {
 
   if (isLoading) {
     return (
-      <View className="flex-1 items-center justify-center">
+      <View className="flex-1 items-center justify-center bg-background">
         <ActivityIndicator size="large" className="text-primary" />
       </View>
     )

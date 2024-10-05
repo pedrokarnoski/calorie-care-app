@@ -1,13 +1,12 @@
 import { useRef } from 'react'
 import { KeyboardAvoidingView, Platform, ScrollView } from 'react-native'
 
-import { ScreenHeader } from '@/components/ScreenHeader'
-
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Text } from '@/components/ui/text'
 import { useDataStorage } from '@/storage/data'
 
+import { Header } from '@/components/Header'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'expo-router'
 import { Controller, useForm } from 'react-hook-form'
@@ -56,7 +55,10 @@ export default function CreateDiet() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={80}
     >
-      <ScreenHeader title="Dieta" subtitle="Passo 1" />
+      <Header
+        title="Dieta"
+        action={<Text className="text-foreground font-medium">Passo 1</Text>}
+      />
 
       <ScrollView className="p-8">
         <Text className="text-xl font-bold mb-4">Informe seus dados</Text>

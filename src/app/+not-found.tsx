@@ -10,7 +10,7 @@ export default function NotFoundScreen() {
       </Text>
       <Text className="text-lg text-foreground text-center">
         Página não encontrada.{' '}
-        <Link href="/" className="text-primary">
+        <Link href="/(drawer)/home" className="text-primary">
           Voltar para a página inicial
         </Link>
       </Text>

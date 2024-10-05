@@ -2,12 +2,12 @@ import { ChevronLeft } from '@/lib/icons'
 import { useRouter } from 'expo-router'
 import { Text, TouchableOpacity, View } from 'react-native'
 
-type ScreenHeaderProps = {
+type HeaderProps = {
   title: string
-  subtitle: string
+  action?: JSX.Element
 }
 
-export function ScreenHeader({ title, subtitle }: ScreenHeaderProps) {
+export function Header({ title, action }: HeaderProps) {
   const router = useRouter()
 
   const handleBackPress = () => {
@@ -21,7 +21,7 @@ export function ScreenHeader({ title, subtitle }: ScreenHeaderProps) {
       </TouchableOpacity>
       <View className="flex-1 flex-row items-center justify-between">
         <Text className="text-foreground font-bold text-xl">{title}</Text>
-        <Text className="text-foreground font-medium">{subtitle}</Text>
+        {action && <View>{action}</View>}
       </View>
     </View>
   )
