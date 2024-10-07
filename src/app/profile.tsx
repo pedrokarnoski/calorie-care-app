@@ -25,16 +25,28 @@ export default function Profile() {
 
       <View className="flex-1 bg-background">
         <View className="items-center justify-center py-8">
-          {!user?.hasImage ? (
-            <Avatar className="h-32 w-h-32" alt="Avatar">
+          {user?.hasImage ? (
+            <Avatar className="h-28 w-28" alt="Avatar">
               <AvatarImage source={{ uri: user?.imageUrl }} />
             </Avatar>
           ) : (
-            <Avatar className="h-32 w-h-32" alt="Avatar">
+            <Avatar className="h-28 w-28" alt="Avatar">
               <AvatarFallback>
-                <Text>{firstLetter}</Text>
+                <Text className="text-2xl">{firstLetter}</Text>
               </AvatarFallback>
             </Avatar>
+          )}
+
+          {user?.fullName && (
+            <Text className="text-foreground font-semibold text-xl mt-4">
+              {user.fullName}
+            </Text>
+          )}
+
+          {user?.emailAddresses && (
+            <Text className="text-foreground text-sm mt-1">
+              {user.emailAddresses[0].emailAddress}
+            </Text>
           )}
         </View>
       </View>
